@@ -28,8 +28,7 @@ class ActionModule(ActionBase):
         if not connection_type or not connection_type.endswith(".mcp"):
             raise AnsibleActionFail(
                 "Connection type %s is not valid for server_info module, "
-                "please use fully qualified name of MCP connection type."
-                % connection_type
+                "please use fully qualified name of MCP connection type." % connection_type
             )
 
         # Get socket path from connection
