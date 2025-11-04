@@ -1,0 +1,5 @@
+---
+template_files:
+  - inventory.yml.j2
+  - vars.yml.j2
+  - manifest.json.j2

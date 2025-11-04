@@ -1,0 +1,53 @@
+---
+- name: Check if the go command exists
+  ansible.builtin.command: which go
+  register: check_go
+  ignore_errors: true
+
+- name: Create temporary directory
+  ansible.builtin.tempfile:
+    state: directory
+    suffix: .github-mcp-server
+  register: tmp_dir
+
+- name: Set temporary directory and Github MCP server executable path
+  ansible.builtin.set_fact:
+    gh_mcp_server_tmp_dir: "{{ tmp_dir.path }}"
+    gh_mcp_server_path: "{{ tmp_dir.path }}/github-mcp-server"
+
+# install go
+- name: Install Go executable
+  when: check_go.rc != 0
+  vars:
+    go_version_label: "{{ go_version }}.{{ ansible_system | lower }}-{{ go_arch_translation[ansible_architecture] }}"
+  block:
+    - name: Get archive checksum
+      uri:
+        url: "https://dl.google.com/go/go{{ go_version_label }}.tar.gz.sha256"
+        return_content: true
+      register: go_checksum
+
+    - name: Download go archive
+      get_url:
+        url: "https://dl.google.com/go/go{{ go_version_label }}.tar.gz"
+        dest: "{{ gh_mcp_server_tmp_dir }}/go{{ go_version_label }}.tar.gz"
+        checksum: "sha256:{{ go_checksum.content }}"
+
+    - name: Install go
+      unarchive:
+        src: "{{ gh_mcp_server_tmp_dir }}/go{{ go_version_label }}.tar.gz"
+        dest: "{{ gh_mcp_server_tmp_dir }}"
+        remote_src: true
+
+    - ansible.builtin.set_fact:
+        go_exec_path: "{{ gh_mcp_server_tmp_dir }}/go/bin/go"
+
+- name: Clone repository for Github MCP server
+  ansible.builtin.command:
+    cmd: git clone https://github.com/github/github-mcp-server src
+    chdir: "{{ gh_mcp_server_tmp_dir }}"
+
+- name: Build the Github MCP server executable
+  ansible.builtin.command:
+    cmd: "{{ go_exec_path | default('go') }} build -o {{ gh_mcp_server_path }}"
+    chdir: "{{ gh_mcp_server_tmp_dir }}/src/cmd/github-mcp-server"

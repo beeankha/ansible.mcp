@@ -1,0 +1,8 @@
+---
+- name: Build Github MCP server
+  ansible.builtin.include_tasks: setup.yml
+  when: not (cleanup_tmp_dir | default('false') | bool)
+
+- name: Clean temporary files
+  ansible.builtin.include_tasks: cleanup.yml
+  when: cleanup_tmp_dir | default('false') | bool

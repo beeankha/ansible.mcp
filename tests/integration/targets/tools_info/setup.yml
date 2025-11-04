@@ -1,0 +1,23 @@
+---
+- hosts: localhost
+  gather_facts: true
+
+  vars_files:
+    - vars/main.yml
+
+  roles:
+    - role: prepare_github_mcp_server
+
+  tasks:
+    - name: Remove file from previous tests
+      ansible.builtin.file:
+        state: absent
+        dest: "{{ item | replace('.j2', '') }}"
+      loop: "{{ template_files }}"
+      ignore_errors: true
+
+    - name: Generate required files from template
+      ansible.builtin.template:
+        src: "{{ item }}"
+        dest: "{{ item | replace('.j2', '') }}"
+      loop: "{{ template_files }}"
