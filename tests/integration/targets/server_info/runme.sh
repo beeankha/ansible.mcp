@@ -7,11 +7,10 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 GITHUB_PAT_VALUE="${ANSIBLE_TEST_GITHUB_PAT:-${GITHUB_PAT:-${GITHUB_TOKEN:-${GITHUB_PERSONAL_ACCESS_TOKEN:-}}}}"
 
-EXTRA_VARS=""
-if [ -n "${GITHUB_PAT_VALUE:-}" ]; then
-    EXTRA_VARS="-e github_pat='${GITHUB_PAT_VALUE}'"
-fi
-
 INVENTORY="${SCRIPT_DIR}/inventory.yml"
 
-ansible-playbook -i "${INVENTORY}" tasks/main.yml ${EXTRA_VARS} "$@"
+if [ -n "${GITHUB_PAT_VALUE:-}" ]; then
+    ansible-playbook -i "${INVENTORY}" tasks/main.yml -e "github_pat=${GITHUB_PAT_VALUE}" "$@"
+else
+    ansible-playbook -i "${INVENTORY}" tasks/main.yml "$@"
+fi
