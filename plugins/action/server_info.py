@@ -39,9 +39,7 @@ class ActionModule(ActionBase):
         try:
             # Use Connection class to call server_info on the connection plugin
             conn = Connection(socket_path)
-            server_info = conn.server_info()
-
-            result["server_info"] = server_info
+            result["server_info"] = conn.server_info()
             return result
 
         except Exception as e:
