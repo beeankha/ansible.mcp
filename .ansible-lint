@@ -4,4 +4,3 @@ profile: production
 exclude_paths:
   - .github/
   - tests/integration
-
