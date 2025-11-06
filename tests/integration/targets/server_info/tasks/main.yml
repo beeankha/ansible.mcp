@@ -27,9 +27,17 @@
   vars:
     ansible_mcp_manifest_path: "{{ ansible_mcp_manifest_path | default(playbook_dir | dirname + '/mcpservers.json') }}"
   tasks:
+    - name: Check if uvx is available
+      ansible.builtin.command: which uvx
+      register: uvx_check
+      changed_when: false
+      failed_when: false
+      check_mode: false
+
     - name: Retrieve server info from AWS IAM MCP server
       ansible.mcp.server_info:
       register: aws_server_info
+      when: uvx_check.rc == 0
 
     - name: Verify AWS server_info result succeeded
       ansible.builtin.assert:
@@ -40,3 +48,4 @@
           - aws_server_info.server_info.serverInfo.name is defined
           - aws_server_info.server_info.serverInfo.version is defined
         fail_msg: "AWS server_info does not contain expected structure"
+      when: uvx_check.rc == 0
