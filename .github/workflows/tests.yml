@@ -91,7 +91,7 @@ jobs:
         id: install-collection
         uses: ansible-network/github_actions/.github/actions/build_install_collection@main
         with:
-          install_python_dependencies: true
+          install_python_dependencies: false
           source_path: .
 
       - name: Set up git
@@ -106,6 +106,7 @@ jobs:
           collection_path: ${{ steps.install-collection.outputs.collection_path }}
           python_version: ${{ env.python_version }}
           ansible_version: ${{ env.ansible_version }}
+          ansible_test_requirement_files: 'test-requirements.txt'
         env:
           ANSIBLE_TEST_GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
   all_green:
