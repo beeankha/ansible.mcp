@@ -107,8 +107,8 @@ jobs:
           python_version: ${{ env.python_version }}
           ansible_version: ${{ env.ansible_version }}
           ansible_test_requirement_files: 'test-requirements.txt'
-        env:
-          ANSIBLE_TEST_GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+          ansible_test_environment: |
+            ANSIBLE_TEST_GITHUB_PAT=${{ secrets.GITHUB_TOKEN }}
   all_green:
     if: ${{ always() }}
     needs:
