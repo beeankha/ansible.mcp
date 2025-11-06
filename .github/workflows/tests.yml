@@ -65,6 +65,8 @@ jobs:
               "python": "3.12"
             }
           ]
+  integration:
+    uses: ansible/ansible-content-actions/.github/workflows/integration.yaml@main
   all_green:
     if: ${{ always() }}
     needs:
@@ -72,13 +74,15 @@ jobs:
       - sanity
       - unit-galaxy
       - ansible-lint
+      - integration
     runs-on: ubuntu-latest
     steps:
       - run: >-
           python -c "assert 'failure' not in
           set([
           '${{ needs.sanity.result }}',
-          '${{ needs.unit-galaxy.result }}'
-          '${{ needs.ansible-lint.result }}'
-          '${{ needs.build-import.result }}'
+          '${{ needs.unit-galaxy.result }}',
+          '${{ needs.ansible-lint.result }}',
+          '${{ needs.build-import.result }}',
+          '${{ needs.integration.result }}'
           ])"
