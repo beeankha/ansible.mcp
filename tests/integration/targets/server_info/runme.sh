@@ -21,14 +21,15 @@ GITHUB_PAT_VALUE="${github_mcp_pat:-${ANSIBLE_TEST_GITHUB_PAT:-${GITHUB_PAT:-${G
 
 # Generate inventory file with PAT injected from template
 # This will overwrite the existing inventory.yml file with the generated version
+GENERATE_INVENTORY="${SCRIPT_DIR}/generate_inventory.yml"
 if [ -n "${GITHUB_PAT_VALUE:-}" ]; then
-    ansible-playbook -c local generate_inventory.yml -e "github_mcp_pat=${GITHUB_PAT_VALUE}" "$@"
+    ansible-playbook -c local "${GENERATE_INVENTORY}" -e "github_mcp_pat=${GITHUB_PAT_VALUE}" "$@"
 else
-    ansible-playbook -c local generate_inventory.yml "$@"
+    ansible-playbook -c local "${GENERATE_INVENTORY}" "$@"
 fi
 
 # Run integration tests
-ansible-playbook -i "${INVENTORY}" tasks/main.yml -e "ansible_mcp_manifest_path=${MANIFEST_PATH}" "$@"
+ansible-playbook -i "${INVENTORY}" "${SCRIPT_DIR}/tasks/main.yml" -e "ansible_mcp_manifest_path=${MANIFEST_PATH}" "$@"
 
 # Delete generated inventory file after tests complete
 rm -f "${INVENTORY}"
