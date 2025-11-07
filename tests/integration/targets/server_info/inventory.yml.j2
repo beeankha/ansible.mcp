@@ -6,7 +6,12 @@ all:
           ansible_connection: ansible.mcp.mcp
           ansible_mcp_server_name: github-server
           ansible_mcp_server_args: []
-          ansible_mcp_server_env: {}
+          ansible_mcp_server_env:
+{% if github_mcp_pat is defined and github_mcp_pat | length > 0 %}
+            GITHUB_PERSONAL_ACCESS_TOKEN: "{{ github_mcp_pat }}"
+{% else %}
+            {}
+{% endif %}
           ansible_mcp_manifest_path: /opt/mcp/mcpservers.json
         aws_iam_server:
           ansible_connection: ansible.mcp.mcp
@@ -17,3 +22,4 @@ all:
             AWS_REGION: us-east-1
             AWS_PROFILE: default
           ansible_mcp_manifest_path: /opt/mcp/mcpservers.json
+

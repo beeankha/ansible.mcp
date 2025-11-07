@@ -30,8 +30,6 @@ options:
         elements: str
         vars:
             - name: ansible_mcp_server_args
-        env:
-            - name: MCP_BEARER_TOKEN
     server_env:
         description:
             - Additional environment variables to pass to the server when using stdio transport.
@@ -47,6 +45,8 @@ options:
         type: str
         vars:
             - name: ansible_mcp_bearer_token
+        env:
+            - name: MCP_BEARER_TOKEN
     manifest_path:
         description:
             - Path to MCP manifest JSON file to resolve server executable paths for stdio.
