@@ -28,10 +28,51 @@
   delegate_to: localhost
   when: github_pat is defined and github_pat | length > 0
 
+- name: Check if AWS credentials are available
+  ansible.builtin.set_fact:
+    aws_region: "{{ lookup('env', 'AWS_REGION') | default('us-east-1', true) }}"
+  delegate_to: localhost
+
+- name: Check if uvx is installed
+  ansible.builtin.command: which uvx
+  register: uvx_check
+  failed_when: false
+  changed_when: false
+  delegate_to: localhost
+
+- name: Skip message when uvx not found
+  ansible.builtin.debug:
+    msg: "Skipping AWS tests - uvx command not found."
+  when: uvx_check.rc != 0
+  delegate_to: localhost
+
+- name: Add aws_server host dynamically
+  ansible.builtin.add_host:
+    name: aws_server
+    ansible_connection: ansible.mcp.mcp
+    ansible_mcp_server_name: aws
+    ansible_mcp_server_args: []
+    ansible_mcp_server_env:
+      AWS_REGION: "{{ aws_region }}"
+      FASTMCP_LOG_LEVEL: "ERROR"
+    ansible_mcp_manifest_path: "{{ role_path }}/files/aws_mcpservers.json"
+    ansible_command_timeout: 120
+    ansible_connect_timeout: 120
+    groups:
+      - mcp_servers
+  delegate_to: localhost
+  when: uvx_check.rc == 0
+
 - name: Run tests against github_server
   delegate_to: github_server
   block:
     - name: Run GitHub MCP tool tests
       ansible.builtin.include_tasks: test_github.yml
-
   when: github_pat is defined and github_pat | length > 0
+
+- name: Run tests against aws_server
+  delegate_to: aws_server
+  block:
+    - name: Run AWS MCP tool tests
+      ansible.builtin.include_tasks: test_aws.yml
+  when: uvx_check.rc == 0

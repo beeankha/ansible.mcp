@@ -1,0 +1,58 @@
+---
+# AWS IAM MCP Server Integration Tests for run_tool action plugin
+# Testing IAM operations against AWS IAM API
+
+- name: List IAM roles
+  ansible.mcp.run_tool:
+    name: list_roles
+    args:
+      max_items: 10
+  no_log: true
+  register: aws_list_roles_result
+
+- name: Verify list_roles result
+  ansible.builtin.assert:
+    that:
+      - aws_list_roles_result is not failed
+      - aws_list_roles_result.content is defined
+      - aws_list_roles_result.changed == false
+    fail_msg: "list_roles tool call failed"
+    success_msg: "list_roles tool call succeeded"
+  when: aws_list_roles_result is not failed
+
+- name: List IAM groups
+  ansible.mcp.run_tool:
+    name: list_groups
+    args:
+      max_items: 10
+  no_log: true
+  register: aws_list_groups_result
+
+- name: Verify list_groups result
+  ansible.builtin.assert:
+    that:
+      - aws_list_groups_result is not failed
+      - aws_list_groups_result.content is defined
+      - aws_list_groups_result.changed == false
+    fail_msg: "list_groups tool call failed"
+    success_msg: "list_groups tool call succeeded"
+  when: aws_list_groups_result is not failed
+
+- name: List IAM policies (customer managed only)
+  ansible.mcp.run_tool:
+    name: list_policies
+    args:
+      scope: Local
+      max_items: 10
+  no_log: true
+  register: aws_list_policies_result
+
+- name: Verify list_policies result
+  ansible.builtin.assert:
+    that:
+      - aws_list_policies_result is not failed
+      - aws_list_policies_result.content is defined
+      - aws_list_policies_result.changed == false
+    fail_msg: "list_policies tool call failed"
+    success_msg: "list_policies tool call succeeded"
+  when: aws_list_policies_result is not failed

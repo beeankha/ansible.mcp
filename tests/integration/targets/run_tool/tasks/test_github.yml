@@ -8,7 +8,6 @@
     args:
       query: "org:ansible-collections language:python"
   register: github_search_result
-- debug: var=github_search_result
 
 - name: Verify search_repositories result
   ansible.builtin.assert:
@@ -28,7 +27,6 @@
       repo: amazon.aws
       path: README.md
   register: github_file_result
-- debug: var=github_file_result
 
 - name: Verify get_file_contents result
   ansible.builtin.assert:
@@ -48,7 +46,6 @@
       repo: community.aws
       path: galaxy.yml
   register: galaxy_file_result
-- debug: var=galaxy_file_result
 
 - name: Verify galaxy.yml retrieval
   ansible.builtin.assert:
@@ -66,7 +63,6 @@
     args:
       query: "org:ansible-collections stars:>1000 ansible-collection"
   register: popular_collections_result
-- debug: var=popular_collections_result
 
 - name: Verify popular collections search
   ansible.builtin.assert:
