@@ -62,14 +62,14 @@
 
 - name: Run tests against github_server
   delegate_to: github_server
+  when: github_pat is defined and github_pat | length > 0
   block:
     - name: Run GitHub MCP tool tests
       ansible.builtin.include_tasks: test_github.yml
-  when: github_pat is defined and github_pat | length > 0
 
 - name: Run tests against aws_server
   delegate_to: aws_server
+  when: uvx_check.rc == 0
   block:
     - name: Run AWS MCP tool tests
       ansible.builtin.include_tasks: test_aws.yml
-  when: uvx_check.rc == 0
