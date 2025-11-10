@@ -51,6 +51,12 @@ EXAMPLES = r"""
     name: search_repositories
     args:
       query: "org:my-org language:python"
+
+- name: List IAM roles
+  ansible.mcp.run_tool:
+    name: list_roles
+    args:
+      max_items: 10
 """
 
 
