@@ -12,4 +12,3 @@
         dest: "{{ inventory_file }}"
         content: "{{ lookup('template', template_file) }}"
         mode: "0644"
-

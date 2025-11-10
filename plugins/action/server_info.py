@@ -3,6 +3,8 @@
 # Copyright (c) 2025 Red Hat, Inc.
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
+import traceback
+
 from ansible.errors import AnsibleActionFail
 from ansible.module_utils.connection import Connection
 from ansible.plugins.action import ActionBase
@@ -43,4 +45,7 @@ class ActionModule(ActionBase):
             return result
 
         except Exception as e:
-            raise AnsibleActionFail("Failed to retrieve server info: %s" % str(e))
+            result["failed"] = True
+            result["msg"] = "Failed to retrieve server info: %s" % str(e)
+            result["exception"] = "".join(traceback.format_exception(None, e, e.__traceback__))
+            return result
