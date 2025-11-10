@@ -1,0 +1,15 @@
+---
+- name: Generate inventory file for integration tests
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  vars:
+    template_file: "{{ playbook_dir }}/inventory.yml.j2"
+    inventory_file: "{{ playbook_dir }}/inventory.yml"
+  tasks:
+    - name: Write inventory file
+      ansible.builtin.copy:
+        dest: "{{ inventory_file }}"
+        content: "{{ lookup('template', template_file) }}"
+        mode: "0644"
+
