@@ -6,6 +6,8 @@
   vars:
     template_file: "{{ playbook_dir }}/inventory.yml.j2"
     inventory_file: "{{ playbook_dir }}/inventory.yml"
+    # Default manifest path if not provided
+    ansible_mcp_manifest_path: "{{ ansible_mcp_manifest_path | default(playbook_dir + '/mcpservers.json') }}"
   tasks:
     - name: Write inventory file
       ansible.builtin.copy:
