@@ -4,14 +4,12 @@
   gather_facts: false
   vars:
     ansible_mcp_manifest_path: "{{ ansible_mcp_manifest_path | default(playbook_dir | dirname + '/mcpservers.json') }}"
+    github_pat: "{{ github_mcp_pat | default(lookup('env', 'GITHUB_PERSONAL_ACCESS_TOKEN'), true) }}"
   tasks:
     - name: Retrieve server info from GitHub MCP server
       ansible.mcp.server_info:
       register: github_server_info
-      when: >
-        ansible_mcp_server_env is defined and
-        ansible_mcp_server_env.GITHUB_PERSONAL_ACCESS_TOKEN is defined and
-        ansible_mcp_server_env.GITHUB_PERSONAL_ACCESS_TOKEN | length > 0
+      when: github_pat | length > 0
 
     - name: Verify GitHub server_info result succeeded
       ansible.builtin.assert:
@@ -22,10 +20,7 @@
           - github_server_info.server_info.serverInfo.name is defined
           - github_server_info.server_info.serverInfo.version is defined
         fail_msg: "GitHub server_info does not contain expected structure"
-      when: >
-        ansible_mcp_server_env is defined and
-        ansible_mcp_server_env.GITHUB_PERSONAL_ACCESS_TOKEN is defined and
-        ansible_mcp_server_env.GITHUB_PERSONAL_ACCESS_TOKEN | length > 0
+      when: github_pat | length > 0
 
 - name: Test server_info with AWS IAM MCP server
   hosts: aws_iam_server
