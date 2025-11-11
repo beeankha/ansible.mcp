@@ -9,7 +9,6 @@
     - name: Retrieve server info from GitHub MCP server
       ansible.mcp.server_info:
       register: github_server_info
-      when: github_pat | length > 0
 
     - name: Verify GitHub server_info result succeeded
       ansible.builtin.assert:
@@ -20,7 +19,6 @@
           - github_server_info.server_info.serverInfo.name is defined
           - github_server_info.server_info.serverInfo.version is defined
         fail_msg: "GitHub server_info does not contain expected structure"
-      when: github_pat | length > 0
 
 - name: Test server_info with AWS IAM MCP server
   hosts: aws_iam_server
@@ -38,7 +36,6 @@
     - name: Retrieve server info from AWS IAM MCP server
       ansible.mcp.server_info:
       register: aws_server_info
-      when: uvx_check.rc == 0
 
     - name: Verify AWS server_info result succeeded
       ansible.builtin.assert:
@@ -49,4 +46,3 @@
           - aws_server_info.server_info.serverInfo.name is defined
           - aws_server_info.server_info.serverInfo.version is defined
         fail_msg: "AWS server_info does not contain expected structure"
-      when: uvx_check.rc == 0
