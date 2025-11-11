@@ -23,9 +23,9 @@ GITHUB_PAT_VALUE="${github_mcp_pat:-${ANSIBLE_TEST_GITHUB_PAT:-${GITHUB_PAT:-${G
 # This will overwrite the existing inventory.yml file with the generated version
 GENERATE_INVENTORY="${SCRIPT_DIR}/generate_inventory.yml"
 if [ -n "${GITHUB_PAT_VALUE:-}" ]; then
-    ansible-playbook -c local "${GENERATE_INVENTORY}" -e "github_mcp_pat=${GITHUB_PAT_VALUE}" "$@"
+    ansible-playbook -c local "${GENERATE_INVENTORY}" -e "github_mcp_pat=${GITHUB_PAT_VALUE}" -e "ansible_mcp_manifest_path=${MANIFEST_PATH}" "$@"
 else
-    ansible-playbook -c local "${GENERATE_INVENTORY}" "$@"
+    ansible-playbook -c local "${GENERATE_INVENTORY}" -e "ansible_mcp_manifest_path=${MANIFEST_PATH}" "$@"
 fi
 
 # Run integration tests
