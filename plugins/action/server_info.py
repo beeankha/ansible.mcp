@@ -28,14 +28,18 @@ class ActionModule(ActionBase):
         connection_type = self._play_context.connection
         if not connection_type or not connection_type.endswith(".mcp"):
             result["failed"] = True
-            result["msg"] = "Connection type %s is not valid for server_info module, "
-            "please use fully qualified name of MCP connection type." % connection_type
+            result["msg"] = (
+                "Connection type %s is not valid for server_info module, "
+                "please use fully qualified name of MCP connection type."
+            ) % connection_type
+            return result
 
         # Get socket path from connection
         socket_path = self._connection.socket_path
         if socket_path is None:
             result["failed"] = True
             result["msg"] = "socket_path is not available from connection"
+            return result
 
         try:
             # Use Connection class to call server_info on the connection plugin
