@@ -1,6 +1,6 @@
 ---
 - name: Run ansible.mcp.tools_info tests
-  hosts: mcp_servers
+  hosts: github
   gather_facts: false
 
   tasks:

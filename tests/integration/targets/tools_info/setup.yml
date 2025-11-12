@@ -7,6 +7,14 @@
 
   roles:
     - role: prepare_github_mcp_server
+    - role: generate_inventory
+      ansible_mcp_inventory_file_path: "{{ playbook_dir }}/inventory.yml"
+      ansible_mcp_hosts:
+        - name: github
+          server_name: github
+          server_env:
+            GITHUB_PERSONAL_ACCESS_TOKEN: "{{ github_mcp_pat }}"
+          manifest_path: "{{ playbook_dir }}/manifest.json"
 
   tasks:
     - name: Remove file from previous tests

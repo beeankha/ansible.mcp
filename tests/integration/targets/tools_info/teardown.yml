@@ -5,11 +5,21 @@
   vars_files:
     - vars/main.yml
 
-  roles:
-    - role: prepare_github_mcp_server
-      cleanup_tmp_dir: true
-
   tasks:
+    - name: Load variables from vars.yaml
+      ansible.builtin.include_vars:
+        file: vars.yaml
+      ignore_errors: true
+      register: load_vars
+
+    # - name: Delete temporary files created for testing
+    #   ansible.builtin.file:
+    #     state: absent
+    #     path: "{{ item }}"
+    #   loop: "{{ tools_info_files_to_delete }}"
+    #   ignore_errors: true
+    #   when: load_vars is sucessful
+
     - name: Remove temporary files
       ansible.builtin.file:
         state: absent

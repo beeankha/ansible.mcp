@@ -1,5 +1,0 @@
----
-- name: Clean temporary directory
-  ansible.builtin.file:
-    state: absent
-    path: "{{ gh_mcp_server_tmp_dir }}"

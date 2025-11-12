@@ -1,0 +1,17 @@
+all:
+  children:
+    mcp_servers:
+      hosts:
+{% for host_name in ansible_mcp_hosts %}
+        {{ host_name.name }}:
+          ansible_connection: ansible.mcp.mcp
+          ansible_mcp_server_name: {{ host_name.server_name }}
+          ansible_mcp_server_args: {{ host_name.server_args | default([]) }}
+{% if host_name.server_env is defined %}
+          ansible_mcp_server_env:
+{% for key, value in host_name.server_env.items() %}
+            {{ key }}: '{{ value }}'
+{% endfor %}
+{% endif %}
+          ansible_mcp_manifest_path: "{{ host_name.manifest_path | default('/opt/mcp/mcpservers.json') }}"
+{% endfor %}

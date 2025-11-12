@@ -3,7 +3,7 @@
 set -eux
 
 function cleanup() {
-    ansible-playbook teardown.yml -e "@./vars.yml" "$@"
+    ansible-playbook teardown.yml "$@"
     exit 1
 }
 
@@ -19,4 +19,4 @@ ansible-playbook setup.yml "$@"
 ansible-playbook test.yml -i inventory.yml "$@"
 
 # cleanup environment
-ansible-playbook teardown.yml -e "@./vars.yml" "$@"
+ansible-playbook teardown.yml "$@"
