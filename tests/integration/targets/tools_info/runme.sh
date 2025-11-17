@@ -3,7 +3,7 @@
 set -eux
 
 function cleanup() {
-    # rm -f ./inventory.yml
+    rm -f ./inventory.yml
     exit 1
 }
 
@@ -13,7 +13,7 @@ export ANSIBLE_ROLES_PATH
 trap 'cleanup "${@}"'  ERR
 
 # Configure test environment
-ansible-playbook setup.yml -e "ansible_mcp_inventory_file_path=./inventory.yml" "$@"
+ansible-playbook setup.yml "$@"
 
 # Run tests
 ansible-playbook test.yml -i inventory.yml "$@"
