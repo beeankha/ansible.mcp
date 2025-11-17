@@ -2,32 +2,12 @@
 - hosts: localhost
   gather_facts: true
 
-  vars_files:
-    - vars/main.yml
-
   vars:
-    ansible_mcp_inventory_file_path: "{{ playbook_dir }}/inventory.yml"
     ansible_mcp_hosts:
       - name: github
         server_name: github
-        server_env:
-          GITHUB_PERSONAL_ACCESS_TOKEN: "{{ github_mcp_pat }}"
+        bearer_token: "{{ github_mcp_pat }}"
         manifest_path: "{{ playbook_dir }}/manifest.json"
 
   roles:
-    - role: prepare_github_mcp_server
     - role: generate_inventory
-
-  tasks:
-    - name: Remove file from previous tests
-      ansible.builtin.file:
-        state: absent
-        dest: "{{ item | replace('.j2', '') }}"
-      loop: "{{ template_files }}"
-      ignore_errors: true
-
-    - name: Generate required files from template
-      ansible.builtin.template:
-        src: "{{ item }}"
-        dest: "{{ item | replace('.j2', '') }}"
-      loop: "{{ template_files }}"

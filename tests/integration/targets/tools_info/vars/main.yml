@@ -1,4 +1,0 @@
----
-template_files:
-  - vars.yml.j2
-  - manifest.json.j2

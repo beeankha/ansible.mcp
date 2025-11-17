@@ -13,5 +13,8 @@ all:
             {{ key }}: '{{ value }}'
 {% endfor %}
 {% endif %}
+{% if host_name.bearer_token is defined %}
+          ansible_mcp_bearer_token: '{{ host_name.bearer_token }}'
+{% endif %}
           ansible_mcp_manifest_path: "{{ host_name.manifest_path | default('/opt/mcp/mcpservers.json') }}"
 {% endfor %}
