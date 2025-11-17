@@ -9,10 +9,10 @@
         bearer_token: "{{ github_mcp_pat }}"
         manifest_path: "{{ playbook_dir }}/manifest.json"
 
-  roles:
-    - role: generate_inventory
-
   tasks:
+    - ansible.builtin.import_role:
+        name: generate_inventory
+
     - name: Copy temporary inventory file into expected location
       ansible.builtin.copy:
         src: "{{ generate_inventory_file_path }}"
