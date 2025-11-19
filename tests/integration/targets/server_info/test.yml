@@ -41,4 +41,3 @@
           - aws_server_info.server_info.serverInfo.name is defined
           - aws_server_info.server_info.serverInfo.version is defined
         fail_msg: "AWS server_info does not contain expected structure"
-
