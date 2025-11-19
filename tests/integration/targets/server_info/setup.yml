@@ -6,7 +6,7 @@
     ansible_mcp_hosts:
       - name: github_server
         server_name: github-server
-        bearer_token: "{{ github_mcp_pat | default(lookup('env', 'GITHUB_PERSONAL_ACCESS_TOKEN'), true) }}"
+        bearer_token: "{{ github_mcp_pat }}"
         manifest_path: "{{ playbook_dir }}/manifest.json"
       - name: aws_iam_server
         server_name: aws-iam-mcp-server

@@ -4,7 +4,7 @@
     name: github-mcp-server
     ansible_connection: ansible.mcp.mcp
     ansible_mcp_server_name: github-server
-    ansible_mcp_bearer_token: "{{ github_mcp_pat | default(lookup('env', 'GITHUB_PERSONAL_ACCESS_TOKEN'), true) }}"
+    ansible_mcp_bearer_token: "{{ github_mcp_pat }}"
     ansible_mcp_manifest_path: "{{ role_path }}/files/manifest.json"
 
 - name: Run ansible.mcp.server_info against GitHub server (HTTP)
