@@ -1,0 +1,14 @@
+{
+  "github": {
+    "type": "stdio",
+    "command": "npx",
+    "args": ["-y", "@modelcontextprotocol/server-github"],
+    "description": "GitHub MCP Server - Access GitHub repositories via stdio"
+  },
+  "aws": {
+    "type": "stdio",
+    "command": "uvx",
+    "args": ["awslabs.iam-mcp-server@latest"],
+    "description": "AWS IAM MCP Server - Manage AWS IAM resources via stdio"
+  }
+}
