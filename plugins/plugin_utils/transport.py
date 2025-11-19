@@ -196,10 +196,14 @@ class Stdio(Transport):
         try:
             # Send request to the server
             self._stdin_write(data)
+        except Exception as e:
+            raise AnsibleConnectionFailure(f"Error sending request to MCP server: {str(e)}")
+
+        try:
             # Read response
             return self._stdout_read()
         except Exception as e:
-            raise AnsibleConnectionFailure(f"Error sending request to MCP server: {str(e)}")
+            raise AnsibleConnectionFailure(f"Error reading server response: {str(e)}")
 
     def close(self) -> None:
         """Close the server connection."""

@@ -1,0 +1,14 @@
+---
+- hosts: localhost
+  gather_facts: true
+
+  vars:
+    ansible_mcp_hosts:
+      - name: github
+        server_name: github
+        bearer_token: "{{ github_mcp_pat }}"
+        manifest_path: "{{ playbook_dir }}/manifest.json"
+    ansible_mcp_inventory_file_path: "{{ playbook_dir }}/inventory.yml"
+
+  roles:
+    - role: prepare_inventory

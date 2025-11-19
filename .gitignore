@@ -1,8 +1,11 @@
 # https://raw.githubusercontent.com/github/gitignore/main/Python.gitignore
 # Byte-compiled / optimized / DLL files
+tests/integration/inventory
+tests/integration/integration_config.yml
 __pycache__/
 *.py[cod]
 *$py.class
+tests/integration/integration_config.yml
 
 # C extensions
 *.so
