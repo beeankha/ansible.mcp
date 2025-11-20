@@ -1,0 +1,43 @@
+---
+- name: Test server_info with GitHub MCP server
+  hosts: github_server
+  gather_facts: false
+  tasks:
+    - name: Retrieve server info from GitHub MCP server
+      ansible.mcp.server_info:
+      register: github_server_info
+
+    - name: Verify GitHub server_info result succeeded
+      ansible.builtin.assert:
+        that:
+          - not github_server_info.failed | default(false)
+          - github_server_info.server_info is defined
+          - github_server_info.server_info.serverInfo is defined
+          - github_server_info.server_info.serverInfo.name is defined
+          - github_server_info.server_info.serverInfo.version is defined
+        fail_msg: "GitHub server_info does not contain expected structure"
+
+- name: Test server_info with AWS IAM MCP server
+  hosts: aws_iam_server
+  gather_facts: false
+  tasks:
+    - name: Check if uvx is available
+      ansible.builtin.command: which uvx
+      register: uvx_check
+      changed_when: false
+      failed_when: false
+      check_mode: false
+
+    - name: Retrieve server info from AWS IAM MCP server
+      ansible.mcp.server_info:
+      register: aws_server_info
+
+    - name: Verify AWS server_info result succeeded
+      ansible.builtin.assert:
+        that:
+          - not aws_server_info.failed | default(false)
+          - aws_server_info.server_info is defined
+          - aws_server_info.server_info.serverInfo is defined
+          - aws_server_info.server_info.serverInfo.name is defined
+          - aws_server_info.server_info.serverInfo.version is defined
+        fail_msg: "AWS server_info does not contain expected structure"
