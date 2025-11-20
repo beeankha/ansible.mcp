@@ -1,6 +1,6 @@
 {
   "github": {
-    "type": "stdio",
+    "type": "http",
     "command": "npx",
     "args": ["-y", "@modelcontextprotocol/server-github"],
     "description": "GitHub MCP Server - Access GitHub repositories via stdio"
