@@ -13,14 +13,20 @@ all:
         aws:
           ansible_connection: ansible.mcp.mcp
           ansible_mcp_server_name: aws
-{%if aws_mcp_server_args is defined %}
+{% if aws_mcp_server_args is defined %}
           ansible_mcp_server_args: {{ aws_mcp_server_args }}
 {% endif %}
           ansible_mcp_server_env:
-            AWS_REGION: "{{ aws_region }}"
+            AWS_REGION: "{{ aws_region | default('us-east-1')}}"
+{% if aws_access_key is defined %}
             AWS_ACCESS_KEY_ID: "{{ aws_access_key }}"
+{% endif %}
+{% if aws_secret_key is defined %}
             AWS_SECRET_ACCESS_KEY: "{{ aws_secret_key }}"
+{% endif %}
+{% if security_token is defined %}
             AWS_SESSION_TOKEN: "{{ security_token }}"
+{% endif %}
             FASTMCP_LOG_LEVEL: "ERROR"
           ansible_mcp_manifest_path: {{ role_path }}/files/manifest.json
 {% endif %}
