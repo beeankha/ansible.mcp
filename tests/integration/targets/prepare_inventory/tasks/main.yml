@@ -1,4 +1,18 @@
 ---
+- name: Include integration_config.yml variable
+  ansible.builtin.include_vars:
+    file: "{{ role_path }}/../../integration_config.yml"
+
+- name: Check if GitHub PAT is available
+  ansible.builtin.fail:
+    msg: 'The Github PAT must be defined using github_mcp_pat variable'
+  when: (github_mcp_pat is undefined) and ('github' in ansible_mcp_hosts)
+
+- name: Check if uvx is installed
+  ansible.builtin.command: which uvx
+  failed_when: false
+  when: "'aws' in ansible_mcp_hosts"
+
 - name: Generate inventory file in the expected location
   ansible.builtin.template:
     src: inventory.yml.j2

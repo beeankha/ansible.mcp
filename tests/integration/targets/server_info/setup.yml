@@ -3,19 +3,8 @@
   gather_facts: true
 
   vars:
-    ansible_mcp_hosts:
-      - name: github_server
-        server_name: github-server
-        bearer_token: "{{ github_mcp_pat }}"
-        manifest_path: "{{ playbook_dir }}/manifest.json"
-      - name: aws_iam_server
-        server_name: aws-iam-mcp-server
-        server_args:
-          - --readonly
-        server_env:
-          AWS_REGION: us-east-1
-          AWS_PROFILE: default
-        manifest_path: "{{ playbook_dir }}/manifest.json"
+    ansible_mcp_hosts: ['github', 'aws']
+    aws_mcp_server_args: ['--readonly']
     ansible_mcp_inventory_file_path: "{{ playbook_dir }}/inventory.yml"
 
   roles:

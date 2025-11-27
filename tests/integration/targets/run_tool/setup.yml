@@ -3,47 +3,8 @@
   gather_facts: true
 
   vars:
-    ansible_mcp_hosts: []
+    ansible_mcp_hosts: ['github', 'aws']
     ansible_mcp_inventory_file_path: "{{ playbook_dir }}/inventory.yml"
 
-  tasks:
-    - name: Check if GitHub PAT is available
-      ansible.builtin.set_fact:
-        github_pat: "{{ github_mcp_pat | default(lookup('env', 'GITHUB_PERSONAL_ACCESS_TOKEN'), true) }}"
-      failed_when: false
-
-    - name: Add GitHub MCP host if PAT is available
-      ansible.builtin.set_fact:
-        ansible_mcp_hosts: "{{ ansible_mcp_hosts + [github_host] }}"
-      vars:
-        github_host:
-          name: github
-          server_name: github
-          server_args: []
-          bearer_token: "{{ github_pat }}"
-          manifest_path: "{{ playbook_dir }}/manifest.json"
-      when: github_pat is defined and github_pat | length > 0
-
-    - name: Check if uvx is installed (for AWS tests)
-      ansible.builtin.command: which uvx
-      register: uvx_check
-      failed_when: false
-      changed_when: false
-
-    - name: Add AWS MCP host if uvx is available
-      ansible.builtin.set_fact:
-        ansible_mcp_hosts: "{{ ansible_mcp_hosts + [aws_host] }}"
-      vars:
-        aws_host:
-          name: aws
-          server_name: aws
-          server_args: []
-          server_env:
-            AWS_REGION: "{{ lookup('env', 'AWS_REGION') | default('us-east-1', true) }}"
-            FASTMCP_LOG_LEVEL: "ERROR"
-          manifest_path: "{{ playbook_dir }}/manifest.json"
-      when: uvx_check.rc == 0
-
-    - name: Generate inventory file
-      ansible.builtin.include_role:
-        name: prepare_inventory
+  roles:
+    - role: prepare_inventory

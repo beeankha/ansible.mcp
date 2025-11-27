@@ -1,6 +1,6 @@
 ---
 - name: Test server_info with GitHub MCP server
-  hosts: github_server
+  hosts: github
   gather_facts: false
   tasks:
     - name: Retrieve server info from GitHub MCP server
@@ -18,7 +18,7 @@
         fail_msg: "GitHub server_info does not contain expected structure"
 
 - name: Test server_info with AWS IAM MCP server
-  hosts: aws_iam_server
+  hosts: aws
   gather_facts: false
   tasks:
     - name: Check if uvx is available
