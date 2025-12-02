@@ -1,0 +1,22 @@
+# AWS Configuration
+AWS_REGION: "us-east-1"
+AWS_PROFILE: "default"
+
+# VPC Configuration
+vpc_name: "demo-vpc"
+vpc_cidr: "10.1.0.0/16"
+vpc_dns_support: true
+vpc_dns_hostnames: true
+vpc_tags:
+  Name: "{{ vpc_name }}"
+
+# EC2 Configuration
+ec2_instance_type: "t3.micro"
+ec2_key_pair: "demo-key"              # replace with your key pair
+ec2_count: 1
+ec2_tags:
+  Name: "demo-ec2"
+
+# AMI Selection
+ami_owner_id: "137112412989"           # Amazon official owner for Amazon Linux
+ami_name_pattern: "amzn2-ami-hvm-*-x86_64-gp2"
