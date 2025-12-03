@@ -45,7 +45,8 @@ aws configure --profile default
 # Option 2: Environment Variables
 export AWS_ACCESS_KEY_ID=your-access-key
 export AWS_SECRET_ACCESS_KEY=your-secret-key
-export AWS_REGION=aws-region-here
+export AWS_SESSION_TOKEN=your-session-token  # Required if using temporary credentials
+export AWS_REGION=your-aws-region
 ```
 
 ### 3. Ansible MCP Collection

@@ -10,5 +10,5 @@ all:
             AWS_REGION: us-east-1
             AWS_PROFILE: default
             FASTMCP_LOG_LEVEL: ERROR
-            aws-foundation: "true"
+            AWS_FOUNDATION: "true"
           ansible_mcp_manifest_path: "{{ playbook_dir }}/manifest.json"
