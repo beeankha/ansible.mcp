@@ -45,7 +45,7 @@ aws configure --profile default
 # Option 2: Environment Variables
 export AWS_ACCESS_KEY_ID=your-access-key
 export AWS_SECRET_ACCESS_KEY=your-secret-key
-export AWS_REGION=us-east-1
+export AWS_REGION=aws-region-here
 ```
 
 ### 3. Ansible MCP Collection
@@ -122,6 +122,7 @@ The playbook demonstrates:
 1. **Server Connection**: Connects to AWS Core MCP server via stdio transport using uvx
 2. **Server Discovery**: Retrieves server information (name, version, protocol)
 3. **Tool Discovery**: Lists all available tools from the aws-foundation role
+4. **Tool Execution**: Runs the AWS API Server's `suggest_aws_commands` tool to get CLI command suggestions
 
 **Tools available:**
 - **AWS Knowledge Server tools**: search_documentation, read_documentation, list_regions, get_regional_availability, recommend

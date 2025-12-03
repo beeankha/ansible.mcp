@@ -31,3 +31,14 @@
     - name: Display AWS API Server tools
       ansible.builtin.debug:
         msg: "{{ tools_list.tools | selectattr('name', 'search', 'aws_api') | map(attribute='name') | list }}"
+
+    - name: Get AWS CLI command suggestions
+      ansible.mcp.run_tool:
+        name: aws_api_suggest_aws_commands
+        args:
+          query: "list EC2 instances"
+      register: suggestions_result
+
+    - name: Display command suggestions
+      ansible.builtin.debug:
+        msg: "{{ suggestions_result.content.0.text }}"
