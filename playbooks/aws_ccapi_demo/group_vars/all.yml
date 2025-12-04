@@ -1,8 +1,8 @@
 # AWS Configuration
-region: "{{ lookup('env', 'AWS_REGION') | default('us-west-2', true) }}"
-profile: "{{ lookup('env', 'AWS_PROFILE') | default('aworks', true) }}"
+region: "{{ lookup('env', 'AWS_REGION') | default('us-east-1', true) }}"
+profile: "{{ lookup('env', 'AWS_PROFILE') | default('deafault', true) }}"
 
-security_scanning: "{{ lookup('env', 'SECURITY_SCANNING') | default('disabled', true) | lower }}"
+security_scanning: "{{ lookup('env', 'SECURITY_SCANNING') | default('enabled', true) | lower }}"
 
 # VPC Configuration
 vpc_cidr: "10.1.0.0/16"
@@ -27,6 +27,5 @@ ec2_tags:
   - Key: Name
     Value: "demo-ec2"
 
-# AMI Selection
-ami_owner_id: "137112412989"  # Amazon official owner for Amazon Linux
-ami_name_pattern: "amzn2-ami-hvm-*-x86_64-gp2"
+# AMI Configuration
+ec2_ami_id: "ami-0156001f0548e90b1"

@@ -47,29 +47,6 @@
       ansible.builtin.set_fact:
         environment_token: "{{ env_check.content[0].text | from_json | json_query('environment_token') }}"
 
-    - name: Find latest Amazon Linux 2 AMI ID
-      amazon.aws.ec2_ami_info:
-        region: "{{ region }}"
-        profile: "{{ profile }}"
-        owners:
-          - "{{ ami_owner_id }}"
-        filters:
-          name: "{{ ami_name_pattern }}"
-          state: available
-      register: ami_info
-
-    - name: Set AMI ID fact
-      ansible.builtin.set_fact:
-        ec2_ami_id: >-
-          {{
-            (ami_info.images
-              | default([])
-              | sort(attribute='creation_date', reverse=true)
-              | map(attribute='image_id')
-              | first
-            ).strip()
-          }}
-
     - name: Initialize resource_results
       ansible.builtin.set_fact:
         resource_results: {}

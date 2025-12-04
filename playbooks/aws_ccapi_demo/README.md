@@ -14,7 +14,6 @@ The AWS CCAPI MCP Server provides programmatic access to AWS resources via the C
 - Connecting to the MCP server using `stdio` transport via `uvx`
 - Sequential creation of AWS resources with correct dependency handling:
     - VPC → Subnet → KeyPair → EC2
-- Dynamic selection of the latest AMI
 - Use of MCP tools for:
     - Resource code generation
     - Resource creation
@@ -163,9 +162,8 @@ ec2_tags:
   - Key: Name
     Value: "demo-ec2"
 
-# AMI Selection
-ami_owner_id: "137112412989"  # Amazon official owner for Amazon Linux
-ami_name_pattern: "amzn2-ami-hvm-*-x86_64-gp2"
+# AMI Configuration
+ec2_ami_id: "ami-0156001f0548e90b1"
 ```
 
 ## Playbook Overview (demo.yml)
@@ -176,11 +174,9 @@ The playbook executes the following workflow:
     - Uses `ansible.mcp.server_info` to fetch MCP server information.
 2. Check Environment and Get Token
     - Runs `check_environment_variables` to obtain an `environment_token`.
-3. Select Latest Amazon Linux 2 AMI
-    - Uses `amazon.aws.ec2_ami_info` and sets `ec2_ami_id`.
-4. Initialize Resource Tracking
+3. Initialize Resource Tracking
     - `resource_results` dictionary keeps track of created resources for dependency resolution.
-5. Sequential Resource Creation Using `tasks/process_resource.yml`
+4. Sequential Resource Creation Using `tasks/process_resource.yml`
    
    Each resource goes through a standardized workflow:
    - _Get AWS Session Info_: retrieves temporary, scoped credentials.
@@ -204,7 +200,6 @@ You can customize variables in ``group_vars/all.yml``:
 - **VPC settings**: ``vpc_cidr``, ``vpc_dns_support``, ``vpc_dns_hostnames``, ``vpc_tags``
 - **Subnet**: ``subnet_cidr``, ``subnet_az``, ``subnet_tags``
 - **EC2 settings**: ``ec2_instance_type``, ``ec2_count``, ``ec2_key_pair``, ``ec2_tags``
-- **AMI selection**: ``ami_owner_id``, ``ami_name_pattern``
 - **AWS region/profile**: ``AWS_REGION``, ``AWS_PROFILE``
 - **Security scanning** is conditional on ``SECURITY_SCANNING`` variable.
 
@@ -214,7 +209,6 @@ _Example_: to create a larger VPC_
 vpc_name: "custom-vpc"
 vpc_cidr: "10.2.0.0/16"
 ec2_instance_type: "t3.medium"
-ami_name_pattern: "amzn2-ami-hvm-*-x86_64-gp2"
 ```
 
 ## Notes
@@ -227,7 +221,6 @@ ami_name_pattern: "amzn2-ami-hvm-*-x86_64-gp2"
     - ``MANAGED_BY: CCAPI-MCP-SERVER``
     - ``MCP_SERVER_SOURCE_CODE``
     - ``MCP_SERVER_VERSION``
-- Dynamic AMI selection ensures you always use the latest official Amazon Linux AMI, but you can adjust the ``ami_name_pattern`` for other OS or versions.
 - The playbook handles existing resources gracefully using ``AlreadyExists`` responses.
 
 

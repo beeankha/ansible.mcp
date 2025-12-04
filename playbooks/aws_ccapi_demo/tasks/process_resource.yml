@@ -2,7 +2,7 @@
 - name: Manage resource creation
   block:
     # Step 1: Get fresh credentials for this resource
-    # MCP server’s credential tokens are single-scope tokens
+    # MCP server's credential tokens are single-scope tokens
     - name: Get AWS session info for {{ resource_item.name }}
       ansible.mcp.run_tool:
         server_name: "{{ ansible_mcp_server_name }}"
