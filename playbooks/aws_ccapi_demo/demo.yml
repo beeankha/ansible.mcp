@@ -19,7 +19,7 @@
           EnableDnsSupport: "{{ vpc_dns_support }}"
           EnableDnsHostnames: "{{ vpc_dns_hostnames }}"
           Tags: "{{ vpc_tags }}"
-      
+
       - name: subnet
         type: "AWS::EC2::Subnet"
         properties: {}  # we will fill dynamically after VPC creation
@@ -34,7 +34,7 @@
       register: server_info
 
     - name: Display server details
-      debug:
+      ansible.builtin.debug:
         msg: "Connected to {{ server_info.server_info.serverInfo.name }} version {{ server_info.server_info.serverInfo.version }}"
 
     - name: Check environment variables
@@ -44,7 +44,7 @@
       register: env_check
 
     - name: Set environment_token
-      set_fact:
+      ansible.builtin.set_fact:
         environment_token: "{{ env_check.content[0].text | from_json | json_query('environment_token') }}"
 
     - name: Find latest Amazon Linux 2 AMI ID
@@ -59,7 +59,7 @@
       register: ami_info
 
     - name: Set AMI ID fact
-      set_fact:
+      ansible.builtin.set_fact:
         ec2_ami_id: >-
           {{
             (ami_info.images
@@ -71,24 +71,24 @@
           }}
 
     - name: Initialize resource_results
-      set_fact:
+      ansible.builtin.set_fact:
         resource_results: {}
 
     # Step 1: Create VPC
     - name: Process VPC
-      include_tasks: ./tasks/process_resource.yml
+      ansible.builtin.include_tasks: ./tasks/process_resource.yml
       vars:
         resource_item: "{{ resources | selectattr('name', 'equalto', 'vpc') | first }}"
 
     # Step 2: Create KeyPair
     - name: Process KeyPair
-      include_tasks: ./tasks/process_resource.yml
+      ansible.builtin.include_tasks: ./tasks/process_resource.yml
       vars:
         resource_item: "{{ resources | selectattr('name', 'equalto', 'keypair') | first }}"
 
     # Step 3: Create Subnet
     - name: Process Subnet
-      include_tasks: ./tasks/process_resource.yml
+      ansible.builtin.include_tasks: ./tasks/process_resource.yml
       vars:
         resource_item: >-
           {{
@@ -105,7 +105,7 @@
 
     # Step 4: Create EC2
     - name: Process EC2
-      include_tasks: ./tasks/process_resource.yml
+      ansible.builtin.include_tasks: ./tasks/process_resource.yml
       vars:
         resource_item: >-
           {{
