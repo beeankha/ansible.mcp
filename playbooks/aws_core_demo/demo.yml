@@ -22,7 +22,7 @@
 
     - name: Display enabled roles
       ansible.builtin.debug:
-        msg: "This demo uses the aws-foundation role"
+        msg: "This demo uses the AWS_FOUNDATION role"
 
     - name: Display AWS Knowledge Server tools
       ansible.builtin.debug:
