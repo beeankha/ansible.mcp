@@ -1,0 +1,44 @@
+---
+- name: AWS Core MCP Server Demo - AWS Foundation Integration
+  hosts: aws_core_server
+  gather_facts: false
+
+  tasks:
+    - name: Get server information
+      ansible.mcp.server_info:
+      register: server_info
+
+    - name: Display server details
+      ansible.builtin.debug:
+        msg: "Connected to {{ server_info.server_info.serverInfo.name }} version {{ server_info.server_info.serverInfo.version }}"
+
+    - name: List available tools
+      ansible.mcp.tools_info:
+      register: tools_list
+
+    - name: Show available tools count
+      ansible.builtin.debug:
+        msg: "Available tools: {{ tools_list.tools | length }}"
+
+    - name: Display enabled roles
+      ansible.builtin.debug:
+        msg: "This demo uses the AWS_FOUNDATION role"
+
+    - name: Display AWS Knowledge Server tools
+      ansible.builtin.debug:
+        msg: "{{ tools_list.tools | selectattr('name', 'search', 'aws_knowledge') | map(attribute='name') | list }}"
+
+    - name: Display AWS API Server tools
+      ansible.builtin.debug:
+        msg: "{{ tools_list.tools | selectattr('name', 'search', 'aws_api') | map(attribute='name') | list }}"
+
+    - name: Get AWS CLI command suggestions
+      ansible.mcp.run_tool:
+        name: aws_api_suggest_aws_commands
+        args:
+          query: "list EC2 instances"
+      register: suggestions_result
+
+    - name: Display command suggestions
+      ansible.builtin.debug:
+        msg: "{{ suggestions_result.content.0.text }}"
