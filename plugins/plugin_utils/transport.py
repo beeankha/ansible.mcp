@@ -271,6 +271,29 @@ class StreamableHTTP(Transport):
         except Exception as e:
             raise Exception(f"Failed to send notification: {str(e)}")
 
+    def _extract_response(self, response: Any) -> dict:
+        """Parse the MCP server response received as raw json or event stream.
+
+        Args:
+            response: object returned when calling urllib.request.urlopen.
+
+        Returns:
+            The JSON-RPC response from the server.
+        """
+        # raw_response = response.decode("utf-8")
+        content_type = response.headers.get("Content-Type")
+        raw_response = response.read().decode("utf-8")
+        if content_type == "text/event-stream":
+            for line in raw_response.split("\n"):
+                if line.startswith("data:"):
+                    raw_response = line.split(" ", maxsplit=1)[1]
+                    break
+
+        try:
+            return json.loads(raw_response)
+        except json.JSONDecodeError as e:
+            raise Exception(f"Invalid JSON response: {str(e)}")
+
     def request(self, data: dict) -> dict:
         """Send a request to the server.
 
@@ -296,13 +319,8 @@ class StreamableHTTP(Transport):
 
             self._extract_session_id(response)
 
-            response_data = response.read()
-
             # Parse JSON response
-            try:
-                return json.loads(response_data.decode("utf-8"))
-            except json.JSONDecodeError as e:
-                raise Exception(f"Invalid JSON response: {str(e)}")
+            return self._extract_response(response)
 
         except Exception as e:
             raise Exception(f"Failed to send request: {str(e)}")
