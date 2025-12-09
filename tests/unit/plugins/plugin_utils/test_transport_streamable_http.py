@@ -318,3 +318,43 @@ def test_session_id_updates_on_new_session(mock_open_url, streamable_http):
     streamable_http.request(data2)
 
     assert streamable_http._session_id == "session456"
+
+
+@pytest.mark.parametrize(
+    "headers,response,expected",
+    [
+        (
+            {"Content-Type": "text/event-stream"},
+            'event: message\ndata: {"jsonrpc":"2.0","id":1,"result": {}}',
+            {"jsonrpc": "2.0", "id": 1, "result": {}},
+        ),
+        (
+            {"Content-Type": "application/json"},
+            '{"jsonrpc":"2.0","id":1,"result": {}}',
+            {"jsonrpc": "2.0", "id": 1, "result": {}},
+        ),
+        (
+            {"Content-Type": "any"},
+            '{"jsonrpc":"2.0","id":1,"result": {}}',
+            {"jsonrpc": "2.0", "id": 1, "result": {}},
+        ),
+        (
+            {"Content-Type": "application/json"},
+            'data: {"jsonrpc":"2.0","id":1,"result": {}}',
+            None,
+        ),
+    ],
+)
+def test_extract_response(headers, response, expected):
+    """Test StreamableHTTP _extract_response with various response configurations."""
+    client = StreamableHTTP("http://dummy")
+    m_response = Mock()
+    m_response.headers = headers
+    m_response.read.return_value = response.encode()
+
+    if not expected:
+        with pytest.raises(Exception) as exc_info:
+            client._extract_response(m_response)
+        assert str(exc_info.value).startswith("Invalid JSON response:")
+    else:
+        assert client._extract_response(m_response) == expected
