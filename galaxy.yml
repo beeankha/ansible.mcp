@@ -10,7 +10,7 @@ readme: README.md
 authors:
   - Ansible (https://github.com/ansible)
 
-description: An Ansible collection for interacting with MCP servers.
+description: An Ansible collection for interacting with MCP servers. **Technology Preview**
 license_file: LICENSE
 
 # TO-DO: update the tags based on your content type
