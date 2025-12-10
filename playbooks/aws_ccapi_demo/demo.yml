@@ -102,4 +102,10 @@
       when: >
         resource_results['vpc'] is defined and
         resource_results['keypair'] is defined and
+        resource_results['subnet'] is defined and
         ec2_ami_id is defined
+
+    # Step 5: Output created resources
+    - name: Display summary of created resources
+      ansible.builtin.debug:
+        var: resource_results

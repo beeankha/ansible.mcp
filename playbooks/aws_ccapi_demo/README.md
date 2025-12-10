@@ -253,6 +253,34 @@ Install the Ansible MCP collection:
 ansible-galaxy collection install ansible.mcp
 ```
 
+### 4. AWS IAM Permissions
+
+To run this playbook, the AWS credentials used must have valid IAM permissions to allow the MCP server to manage resources via the AWS Cloud Control API. 
+
+The demo playbook only **creates resources** and reads their properties for processing. Therefore, the minimum required permissions are:
+ 
+```bash
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "cloudcontrol:GetResource",
+        "cloudcontrol:CreateResource",
+        "cloudformation:CreateGeneratedTemplate",
+        "cloudformation:DescribeGeneratedTemplate",
+        "cloudformation:GetGeneratedTemplate"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+```
+
+For detailed information, see the [Cloud Control API IAM Permissions Documentation](https://awslabs.github.io/mcp/servers/ccapi-mcp-server#required-iam-permissions).
+
+
 ## Configuration
 
 ### manifest.json
