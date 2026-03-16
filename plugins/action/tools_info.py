@@ -26,4 +26,4 @@ class ActionModule(ActionBase):
         info = conn.server_info()
         server_name = info["serverInfo"]["name"]
 
-        return dict[str, bool](changed=False, server_name=server_name, tools=tools)
+        return dict(changed=False, server_name=server_name, tools=tools)
