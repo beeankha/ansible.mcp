@@ -17,6 +17,7 @@ description:
     - The plugin validates tool calls using the server's tools list.
     - Fails with an appropriate error message when there is a mismatch.
     - Uses the MCP connection plugin to communicate with the server.
+    - Returns the server name and tool name which were called.
 version_added: "1.0.0"
 options:
     name:
