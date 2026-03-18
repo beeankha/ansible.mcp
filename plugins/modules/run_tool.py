@@ -17,7 +17,6 @@ description:
     - The plugin validates tool calls using the server's tools list.
     - Fails with an appropriate error message when there is a mismatch.
     - Uses the MCP connection plugin to communicate with the server.
-    - Returns the server name and tool name which were called.
 version_added: "1.0.0"
 options:
     name:
@@ -78,4 +77,16 @@ structured_content:
     description: Optional structured result of the tool call.
     returned: when provided by the MCP server
     type: dict
+server_name:
+    description: Name of the MCP server.
+    returned: success
+    type: str
+    version_added: 1.1.0
+    sample: "github-server"
+tool_name:
+    description: Name of the tool used.
+    returned: success
+    type: str
+    version_added: 1.1.0
+    sample: "search_repositories"
 """
