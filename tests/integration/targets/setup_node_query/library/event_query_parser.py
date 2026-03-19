@@ -10,7 +10,7 @@ module: event_query_parser
 short_description: Extract node query from event_query.yml file.
 description:
   - Extract node query from event_query.yml file.
-  - This module is used for integration tests for the collection amazon.aws only.
+  - This module is used for integration tests for the collection ansible.mcp only.
 author:
   - "Aubin Bikouo (@abikouo)"
 options:
@@ -31,18 +31,14 @@ node_queries:
     type: dict
     sample:
         {
-          "s3_bucket_info":
-            '.buckets[] | select(. != null) |
-                canonical_facts: {
-                    name: .name,
-                    tags: (.bucket_tagging // {})
-                },
-                facts: {
-                    infra_type: "PublicCloud",
-                    infra_bucket: "Storage",
-                    device_type: "Bucket"
-                }
-            }'
+            "canonical_facts": {
+                "server_name": "awslabs.iam-mcp-server",
+                "tool_name": "delete_user"
+            },
+            "facts": {
+                "device_type": "tool",
+                "infra_bucket": "mcp"
+            }
         }
 """
 

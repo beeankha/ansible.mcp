@@ -22,7 +22,6 @@ class ActionModule(ActionBase):
 
         conn = Connection(self._connection.socket_path)
         tools = conn.list_tools().get("tools", [])
-        conn = Connection(self._connection.socket_path)
         info = conn.server_info()
         server_name = info["serverInfo"]["name"]
 
